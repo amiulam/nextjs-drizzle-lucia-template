@@ -11,7 +11,7 @@ export default async function AuthLayout({
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
       {children}
     </div>
   );

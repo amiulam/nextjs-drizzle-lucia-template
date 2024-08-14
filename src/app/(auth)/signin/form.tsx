@@ -4,69 +4,119 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/password-input";
-import { Label } from "@/components/ui/label";
 import { signIn } from "@/actions/auth";
-import { useActionState } from "react";
-import { AnimatedSpinner } from "@/components/spinner";
-import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { SigninInput, SignInSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { SubmitButton } from "@/components/submit-button";
 
 export function SignInForm() {
-  const [formState, formAction, isPending] = useActionState(signIn, undefined);
+  const [formState, setFormState] = useState<
+    | {
+        formError?: undefined;
+        fieldError: {
+          email: string | undefined;
+          password: string | undefined;
+        };
+      }
+    | {
+        formError: string;
+        fieldError?: undefined;
+      }
+  >({ fieldError: undefined, formError: "" });
+
+  const form = useForm<SigninInput>({
+    resolver: zodResolver(SignInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = form;
+
+  async function onSubmit(values: SigninInput) {
+    const state = await signIn(values);
+    setFormState(state);
+  }
 
   return (
-    <form action={formAction} className="grid gap-4">
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          required
-          id="email"
-          placeholder="email@example.com"
-          autoComplete="email"
+    <Form {...form}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={control}
           name="email"
-          type="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="email@example.com"
+                  {...field}
+                  type="email"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <PasswordInput
-          id="password"
+        <FormField
+          control={control}
           name="password"
-          required
-          autoComplete="current-password"
-          placeholder="********"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <PasswordInput placeholder="********" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="flex flex-wrap justify-between">
-        <Button variant={"link"} size={"sm"} className="p-0" asChild>
-          <Link href={"/signup"}>Not signed up? Sign up now.</Link>
-        </Button>
-        <Button variant={"link"} size={"sm"} className="p-0" asChild>
-          <Link href={"/reset-password"}>Forgot password?</Link>
-        </Button>
-      </div>
+        <div className="flex flex-wrap justify-between">
+          <Button variant={"link"} size={"sm"} className="p-0" asChild>
+            <Link href={"/signup"}>Not signed up? Sign up now.</Link>
+          </Button>
+          <Button variant={"link"} size={"sm"} className="p-0" asChild>
+            <Link href={"/reset-password"}>Forgot password?</Link>
+          </Button>
+        </div>
 
-      {formState?.fieldError ? (
-        <ul className="list-disc space-y-1 rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
-          {Object.values(formState.fieldError).map((err) => (
-            <li className="ml-4" key={err}>
-              {err}
-            </li>
-          ))}
-        </ul>
-      ) : formState?.formError ? (
-        <p className="rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
-          {formState?.formError}
-        </p>
-      ) : null}
-
-      <Button disabled={isPending} className="relative">
-        <span className={cn(isPending ? "opacity-0" : "")}>Sign In</span>
-        {isPending ? (
-          <div className="absolute inset-0 grid place-items-center">
-            <AnimatedSpinner className="h-6 w-6" />
-          </div>
+        {formState?.fieldError ? (
+          <ul className="list-disc space-y-1 rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
+            {Object.values(formState.fieldError).map((err) => (
+              <li className="ml-4" key={err}>
+                {err}
+              </li>
+            ))}
+          </ul>
+        ) : formState?.formError ? (
+          <p className="rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
+            {formState?.formError}
+          </p>
         ) : null}
-      </Button>
-    </form>
+
+        <SubmitButton
+          loading={isSubmitting}
+          disabled={isSubmitting}
+          className="w-full"
+        >
+          Sign in
+        </SubmitButton>
+      </form>
+    </Form>
   );
 }

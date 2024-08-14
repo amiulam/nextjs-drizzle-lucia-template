@@ -8,10 +8,9 @@ import { generateId, Scrypt } from "lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export const signIn = async (_: unknown, formData: FormData) => {
-  const obj = Object.fromEntries(formData.entries());
+export const signIn = async (values: unknown) => {
+  const parsed = SignInSchema.safeParse(values);
 
-  const parsed = SignInSchema.safeParse(obj);
   if (!parsed.success) {
     const err = parsed.error.flatten();
     return {
@@ -46,18 +45,19 @@ export const signIn = async (_: unknown, formData: FormData) => {
 
   const session = await lucia.createSession(existingUser.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
+
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
     sessionCookie.attributes,
   );
+
   return redirect("/app/dashboard");
 };
 
-export const signUp = async (_: unknown, formData: FormData) => {
-  const obj = Object.fromEntries(formData.entries());
+export const signUp = async (values: unknown) => {
+  const parsed = SignUpSchema.safeParse(values);
 
-  const parsed = SignUpSchema.safeParse(obj);
   if (!parsed.success) {
     const err = parsed.error.flatten();
     return {
@@ -83,6 +83,7 @@ export const signUp = async (_: unknown, formData: FormData) => {
 
   const userId = generateId(21);
   const hashedPassword = await new Scrypt().hash(password);
+
   await db.insert(userTable).values({
     id: userId,
     name,
@@ -90,23 +91,12 @@ export const signUp = async (_: unknown, formData: FormData) => {
     hashedPassword,
   });
 
-  // const verificationCode = await generateEmailVerificationCode(userId, email);
-  // await sendMail(email, EmailTemplate.EmailVerification, {
-  //   code: verificationCode,
-  // });
-
-  // const session = await lucia.createSession(userId, {});
-  // const sessionCookie = lucia.createSessionCookie(session.id);
-  // cookies().set(
-  //   sessionCookie.name,
-  //   sessionCookie.value,
-  //   sessionCookie.attributes,
-  // );
   return redirect("/signin");
 };
 
 export const signOut = async () => {
   const { session } = await validateRequest();
+
   if (!session) {
     return {
       error: "No session found",

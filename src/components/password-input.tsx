@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { EyeOpenIcon, EyeClosedIcon } from "@radix-ui/react-icons";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { Input, type InputProps } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -27,9 +27,9 @@ const PasswordInputComponent = React.forwardRef<HTMLInputElement, InputProps>(
           disabled={props.value === "" || props.disabled}
         >
           {showPassword ? (
-            <EyeClosedIcon className="h-4 w-4" aria-hidden="true" />
+            <EyeSlashIcon className="h-4 w-4" aria-hidden="true" />
           ) : (
-            <EyeOpenIcon className="h-4 w-4" aria-hidden="true" />
+            <EyeIcon className="h-4 w-4" aria-hidden="true" />
           )}
           <span className="sr-only">
             {showPassword ? "Hide password" : "Show password"}

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Card,
   CardContent,
@@ -8,21 +7,31 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DiscordLogoIcon } from "@radix-ui/react-icons";
+import { Google } from "@/components/feature-icons";
 import { SignUpForm } from "./form";
+import Image from "next/image";
 
 export default function SignUpPage() {
   return (
     <Card className="w-[400px]">
       <CardHeader className="text-center">
-        <CardTitle>Sign Up</CardTitle>
+        <CardTitle className="flex items-center justify-center gap-x-1.5">
+          <Image
+            src="/logo-ipsum.svg"
+            alt="the-logo"
+            height={50}
+            width={50}
+            className="size-7"
+          />{" "}
+          <p>Sign Up</p>
+        </CardTitle>
         <CardDescription>Sign up to start using the app</CardDescription>
       </CardHeader>
       <CardContent>
         <Button variant="outline" className="w-full" asChild>
-          <Link href="/login/discord" prefetch={false}>
-            <DiscordLogoIcon className="mr-2 h-5 w-5" />
-            Sign up with Discord
+          <Link href="#" prefetch={false}>
+            <Google className="mr-2.5 size-4" />
+            Continue with Google
           </Link>
         </Button>
         <div className="my-2 flex items-center">

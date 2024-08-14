@@ -1,3 +1,4 @@
+import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
 import { validateRequest } from "@/lib/lucia";
 import type { Metadata } from "next";
@@ -18,9 +19,12 @@ export default async function ProtectedLayout({
   return (
     <div className="grid grid-cols-[4rem_1fr]">
       <Sidebar />
-      <main className="flex h-screen items-center justify-center">
-        {children}
-      </main>
+      <div className="grid grid-rows-[3.5rem_1fr]">
+        <Header />
+        <main className="flex h-[calc(100vh-3.5rem)] items-center justify-center bg-white">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

@@ -2,80 +2,137 @@
 
 import Link from "next/link";
 import { PasswordInput } from "@/components/password-input";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { signUp } from "@/actions/auth";
-import { useActionState } from "react";
-import { cn } from "@/lib/utils";
-import { AnimatedSpinner } from "@/components/spinner";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SignupInput, SignUpSchema } from "@/schemas";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { SubmitButton } from "@/components/submit-button";
+
 
 export function SignUpForm() {
-  const [formState, formAction, isPending] = useActionState(signUp, null);
+  const [formState, setFormState] = useState<
+    | {
+        formError?: undefined;
+        fieldError: {
+          email: string | undefined;
+          password: string | undefined;
+        };
+      }
+    | {
+        formError: string;
+        fieldError?: undefined;
+      }
+  >({ fieldError: undefined, formError: "" });
+
+  const form = useForm<SignupInput>({
+    resolver: zodResolver(SignUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = form;
+
+  async function onSubmit(values: SignupInput) {
+    const state = await signUp(values);
+    setFormState(state);
+  }
 
   return (
-    <form action={formAction} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          required
-          placeholder="John Doe"
+    <Form {...form}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={control}
           name="name"
-          type="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="John Doe"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          required
-          placeholder="email@example.com"
-          autoComplete="email"
+        <FormField
+          control={control}
           name="email"
-          type="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="email@example.com"
+                  {...field}
+                  type="email"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <PasswordInput
-          id="password"
+        <FormField
+          control={control}
           name="password"
-          required
-          autoComplete="current-password"
-          placeholder="********"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <PasswordInput placeholder="********" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
 
-      {formState?.fieldError ? (
-        <ul className="list-disc space-y-1 rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
-          {Object.values(formState.fieldError).map((err) => (
-            <li className="ml-4" key={err}>
-              {err}
-            </li>
-          ))}
-        </ul>
-      ) : formState?.formError ? (
-        <p className="rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
-          {formState?.formError}
-        </p>
-      ) : null}
-      <div>
-        <Link href={"/signin"}>
-          <span className="p-0 text-xs font-medium underline-offset-4 hover:underline">
-            Already signed up? Sign in instead.
-          </span>
-        </Link>
-      </div>
-
-      <Button disabled={isPending} className="relative w-full">
-        <span className={cn(isPending ? "opacity-0" : "")}>Sign Up</span>
-        {isPending ? (
-          <div className="absolute inset-0 grid place-items-center">
-            <AnimatedSpinner className="h-6 w-6" />
-          </div>
+        {formState?.fieldError ? (
+          <ul className="list-disc space-y-1 rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
+            {Object.values(formState.fieldError).map((err) => (
+              <li className="ml-4" key={err}>
+                {err}
+              </li>
+            ))}
+          </ul>
+        ) : formState?.formError ? (
+          <p className="rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
+            {formState?.formError}
+          </p>
         ) : null}
-      </Button>
-    </form>
+        <div>
+          <Link href={"/signin"}>
+            <span className="p-0 text-xs font-medium underline-offset-4 hover:underline">
+              Already signed up? Sign in instead.
+            </span>
+          </Link>
+        </div>
+
+        <SubmitButton
+          loading={isSubmitting}
+          disabled={isSubmitting}
+          className="w-full"
+        >
+          Sign up
+        </SubmitButton>
+      </form>
+    </Form>
   );
 }

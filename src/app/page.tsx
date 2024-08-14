@@ -57,7 +57,7 @@ export default async function Home() {
       <main className="relative row-start-2 flex flex-col items-center gap-8 sm:items-start">
         <div className="container mx-auto lg:max-w-screen-lg">
           <h1 className="mb-7 text-center text-3xl font-bold md:text-xl lg:text-3xl">
-            <a id="features"></a> Tech Stacks
+            <a id="features"></a> Tech Stack
           </h1>
           <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
             {features.map(({ logo: Logo, ...feature }, i) => (
