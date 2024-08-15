@@ -21,7 +21,7 @@ export default async function ProtectedLayout({
       <Sidebar />
       <div className="grid grid-rows-[3.5rem_1fr]">
         <Header />
-        <main className="flex h-[calc(100vh-3.5rem)] items-center justify-center bg-white">
+        <main className="min-h-[calc(100vh-3.5rem)] overflow-x-auto bg-[#F6F8FA] p-4">
           {children}
         </main>
       </div>

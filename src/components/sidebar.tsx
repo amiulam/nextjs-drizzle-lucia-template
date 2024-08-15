@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarIcon, CommandLineIcon } from "@heroicons/react/24/outline";
+import {
+  CalendarIcon,
+  CommandLineIcon,
+  TableCellsIcon,
+} from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -16,6 +20,11 @@ const ROUTES = [
     name: "Framer",
     Icon: CalendarIcon,
     path: "/app/framer",
+  },
+  {
+    name: "Tables",
+    Icon: TableCellsIcon,
+    path: "/app/table",
   },
 ];
 export default function Sidebar() {
@@ -36,7 +45,7 @@ export default function Sidebar() {
         }}
         onMouseEnter={() => setNavHover(true)}
         onMouseLeave={() => setNavHover(false)}
-        className="group absolute z-10 h-screen w-16 border border-zinc-300 bg-white"
+        className="group absolute z-10 h-screen w-16 border-r border-zinc-200 bg-white"
       >
         <motion.img
           initial={{
@@ -48,7 +57,7 @@ export default function Sidebar() {
             opacity: 1,
           }}
           src="/logo-ipsum.svg"
-          className="my-5 ml-4 size-8"
+          className="mb-6 ml-4 mt-4 size-8"
         />
         <motion.ul
           initial={{
@@ -65,9 +74,9 @@ export default function Sidebar() {
             <li
               key={route.name}
               className={cn(
-                "relative flex cursor-pointer items-center rounded-lg border border-transparent p-2 hover:bg-zinc-50 hover:border-zinc-200",
+                "relative flex cursor-pointer items-center rounded-lg border border-transparent p-2 transition-colors hover:bg-[#3248f2] hover:text-white",
                 {
-                  "border-zinc-200 bg-zinc-50": pathname === route.path,
+                  "bg-[#3248f2] text-white": pathname === route.path,
                 },
               )}
               onClick={() => router.push(route.path)}
@@ -83,7 +92,7 @@ export default function Sidebar() {
                       type: "spring",
                       duration: 0.4,
                     }}
-                    className="absolute left-12 whitespace-nowrap"
+                    className="absolute left-12 top-[9px] whitespace-nowrap text-[15px]"
                   >
                     {route.name}
                   </motion.div>

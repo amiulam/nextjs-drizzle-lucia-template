@@ -24,7 +24,7 @@ export default function DashboardPage() {
         <span className={cn(isPending ? "opacity-0" : "")}>Sign Out</span>
         {isPending ? (
           <div className="absolute inset-0 grid place-items-center">
-            <AnimatedSpinner className="h-6 w-6" />
+            <AnimatedSpinner className="size-6" />
           </div>
         ) : null}
       </Button>

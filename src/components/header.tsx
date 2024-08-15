@@ -18,31 +18,25 @@ export default function Header() {
   breadcrumbData.shift();
 
   return (
-    <header className="flex items-center justify-center border-b border-zinc-300 bg-white">
+    <header className="flex items-center justify-center border-b border-zinc-200 bg-white">
       <Breadcrumb>
         <BreadcrumbList>
-          {breadcrumbData.length === 0 ? (
-            <BreadcrumbItem>
-              <BreadcrumbPage>Home</BreadcrumbPage>
+          {breadcrumbData.map((data, i) => (
+            <BreadcrumbItem key={data}>
+              {breadcrumbData.length - 1 === i ? (
+                <BreadcrumbPage>{capitalizeFirstLetter(data)}</BreadcrumbPage>
+              ) : (
+                <>
+                  <BreadcrumbItem key={data}>
+                    <BreadcrumbLink asChild>
+                      <Link href={`/${data}`}>{data}</Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                </>
+              )}
             </BreadcrumbItem>
-          ) : (
-            breadcrumbData.map((data, i) => (
-              <BreadcrumbItem key={data}>
-                {breadcrumbData.length - 1 === i ? (
-                  <BreadcrumbPage>{capitalizeFirstLetter(data)}</BreadcrumbPage>
-                ) : (
-                  <>
-                    <BreadcrumbItem key={data}>
-                      <BreadcrumbLink asChild>
-                        <Link href={`/${data}`}>{data}</Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                  </>
-                )}
-              </BreadcrumbItem>
-            ))
-          )}
+          ))}
         </BreadcrumbList>
       </Breadcrumb>
     </header>

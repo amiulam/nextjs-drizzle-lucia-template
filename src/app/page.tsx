@@ -59,7 +59,7 @@ export default async function Home() {
           <h1 className="mb-7 text-center text-3xl font-bold md:text-xl lg:text-3xl">
             <a id="features"></a> Tech Stack
           </h1>
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {features.map(({ logo: Logo, ...feature }, i) => (
               <Card key={i}>
                 <div className="pl-6 pt-6">
