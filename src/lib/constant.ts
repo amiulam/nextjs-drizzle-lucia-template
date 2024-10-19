@@ -1,5 +1,7 @@
 import { LayoutDashboard, Settings, Sheet, SquareTerminal, Users } from "lucide-react";
 
+export const ITEMS_PER_PAGE = 7;
+
 export const data = {
   user: {
     name: "Amiul Amruh",
@@ -37,7 +39,7 @@ export const data = {
   administrator: [
     {
       name: "Users Management",
-      url: "#",
+      url: "/app/users",
       icon: Users,
     },
     {
