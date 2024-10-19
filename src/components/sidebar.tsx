@@ -33,6 +33,7 @@ import {
 import { ChevronRight, ChevronsUpDown, LogOut, Tent } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { signOut } from "@/actions/auth";
 
 export default function TheSidebar() {
   const pathname = usePathname();
@@ -192,7 +193,11 @@ export default function TheSidebar() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={async () => {
+                    await signOut();
+                  }}
+                >
                   <LogOut />
                   Log out
                 </DropdownMenuItem>

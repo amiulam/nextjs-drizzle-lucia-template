@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { SubmitButton } from "@/components/submit-button";
-
+import { toast } from "sonner";
 
 export function SignUpForm() {
   const [formState, setFormState] = useState<
@@ -50,8 +50,16 @@ export function SignUpForm() {
   } = form;
 
   async function onSubmit(values: SignupInput) {
+    toast.loading("Processing...", { id: "sign-up-processing" });
+
     const state = await signUp(values);
     setFormState(state);
+    
+    toast.dismiss("sign-up-processing");
+
+    if (!state?.fieldError && !state?.formError) {
+      toast.success("Sign up success. You can login now");
+    }
   }
 
   return (
@@ -64,10 +72,7 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="John Doe"
-                  {...field}
-                />
+                <Input placeholder="John Doe" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
