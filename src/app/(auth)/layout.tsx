@@ -1,4 +1,4 @@
-import { validateRequest } from "@/lib/lucia";
+import { getCurrentSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 
 export default async function AuthLayout({
@@ -6,7 +6,7 @@ export default async function AuthLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
   if (user) redirect("/app/dashboard");
 
   return (

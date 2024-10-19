@@ -1,6 +1,6 @@
 import {
   Drizzle,
-  LuciaAuth,
+  IconLock,
   NextjsLight,
   ReactJs,
   ShadcnUi,
@@ -12,11 +12,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { validateRequest } from "@/lib/lucia";
+import { getCurrentSession } from "@/lib/auth/session";
 import Link from "next/link";
 
 export default async function Home() {
-  const { session } = await validateRequest();
+  const { session } = await getCurrentSession();
 
   const features = [
     {
@@ -30,10 +30,10 @@ export default async function Home() {
       logo: ReactJs,
     },
     {
-      name: "Lucia Auth",
+      name: "Self Made Auth Flow",
       description:
         "Credential authentication with email and password",
-      logo: LuciaAuth,
+      logo: IconLock,
     },
     {
       name: "Drizzle",
@@ -51,6 +51,7 @@ export default async function Home() {
       logo: ShadcnUi,
     },
   ];
+  
   return (
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 sm:p-20">
       <div>Next.js 15 Template</div>

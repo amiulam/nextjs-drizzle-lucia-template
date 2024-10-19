@@ -167,22 +167,6 @@ const TailwindCss = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
 );
 TailwindCss.displayName = "TailwindCss";
 
-const LuciaAuth = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
-  ({ className, ...props }, ref) => (
-    <svg
-      ref={ref}
-      {...props}
-      viewBox="0 0 2000 2000"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-      className={cn(className)}
-    >
-      <path d="m1647.66,1673.36L1000,72.73,352.34,1673.36l-102.74,253.91h1500.8l-102.74-253.91Zm-647.66-549l-442.82,545.39,99.55-246.04,343.27-848.35,343.26,848.35,99.55,246.04-442.81-545.39Z" />
-    </svg>
-  ),
-);
-LuciaAuth.displayName = "LuciaAuth";
-
 const Drizzle = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   ({ className, ...props }, ref) => (
     <svg
@@ -295,13 +279,31 @@ const Google = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
 );
 Google.displayName = "Google";
 
+const IconLock = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
+  ({ className, ...props }, ref) => (
+    <svg
+      ref={ref}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      height="1em"
+      width="1em"
+      className={cn(className)}
+      {...props}
+    >
+      <path d="M12 2C9.243 2 7 4.243 7 7v2H6c-1.103 0-2 .897-2 2v9c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-9c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v2H9V7zm9.002 13H13v-2.278c.595-.347 1-.985 1-1.722 0-1.103-.897-2-2-2s-2 .897-2 2c0 .736.405 1.375 1 1.722V20H6v-9h12l.002 9z" />
+    </svg>
+  ),
+);
+
+IconLock.displayName = "IconLock";
+
 export {
   NextjsLight,
   NextjsDark,
   ReactJs,
   TailwindCss,
-  LuciaAuth,
   Drizzle,
   ShadcnUi,
   Google,
+  IconLock,
 };

@@ -10,8 +10,6 @@ export const userTable = pgTable("user", {
   updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
-export type TUser = typeof userTable.$inferSelect;
-
 export const sessionTable = pgTable("session", {
   id: text("id").primaryKey(),
   userId: text("user_id")
@@ -23,3 +21,6 @@ export const sessionTable = pgTable("session", {
   }).notNull(),
   createdAt: timestamp("createdAt").defaultNow(),
 });
+
+export type User = typeof userTable.$inferSelect;
+export type Session = typeof sessionTable.$inferSelect;

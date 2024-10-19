@@ -57,7 +57,8 @@ export default function Sidebar() {
             opacity: 1,
           }}
           src="/logo-ipsum.svg"
-          className="mb-6 ml-4 mt-4 size-8"
+          className="mb-6 ml-4 mt-4 size-8 cursor-pointer"
+          onClick={() => router.push("/")}
         />
         <motion.ul
           initial={{

@@ -1,6 +1,6 @@
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
-import { validateRequest } from "@/lib/lucia";
+import { getCurrentSession } from "@/lib/auth/session";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -13,7 +13,7 @@ export default async function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
   if (!user) redirect("/");
 
   return (

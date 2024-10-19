@@ -2,11 +2,17 @@
 
 import db from "@/drizzle";
 import { userTable } from "@/drizzle/schema";
-import { lucia, validateRequest } from "@/lib/lucia";
+import {
+  createSession,
+  deleteSessionTokenCookie,
+  generateSessionToken,
+  setSessionTokenCookie,
+} from "@/lib/auth/session";
+import { hash, verify } from "@node-rs/argon2";
+import { invalidateSession, validateSessionToken } from "@/lib/auth/session";
 import { SignInSchema, SignUpSchema } from "@/schemas";
-import { generateId, Scrypt } from "lucia";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export const signIn = async (values: unknown) => {
   const parsed = SignInSchema.safeParse(values);
@@ -33,24 +39,16 @@ export const signIn = async (values: unknown) => {
     };
   }
 
-  const validPassword = await new Scrypt().verify(
-    existingUser.hashedPassword,
-    password,
-  );
+  const validPassword = await verify(existingUser.hashedPassword, password);
   if (!validPassword) {
     return {
       formError: "Incorrect email or password",
     };
   }
 
-  const session = await lucia.createSession(existingUser.id, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes,
-  );
+  const sessionToken = generateSessionToken();
+  const session = await createSession(sessionToken, existingUser.id);
+  setSessionTokenCookie(sessionToken, session.expiresAt);
 
   return redirect("/app/dashboard");
 };
@@ -81,8 +79,13 @@ export const signUp = async (values: unknown) => {
     };
   }
 
-  const userId = generateId(21);
-  const hashedPassword = await new Scrypt().hash(password);
+  const userId = crypto.randomUUID();
+  const hashedPassword = await hash(password, {
+    memoryCost: 19456,
+    timeCost: 2,
+    outputLen: 32,
+    parallelism: 1,
+  });
 
   await db.insert(userTable).values({
     id: userId,
@@ -95,24 +98,25 @@ export const signUp = async (values: unknown) => {
 };
 
 export const signOut = async () => {
-  const { session } = await validateRequest();
+  const token = cookies().get("session")?.value ?? null;
+  if (token === null) {
+    return redirect("/signin");
+  }
 
-  if (!session) {
+  if (!token) {
     return {
       error: "No session found",
     };
   }
 
-  const result = await lucia.validateSession(session.id);
+  const result = await validateSessionToken(token);
 
-  await lucia.invalidateSession(result.session?.id!);
-  const sessionCookie = lucia.createBlankSessionCookie();
+  if (!result.session) {
+    return redirect("/login");
+  }
 
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes,
-  );
+  await invalidateSession(result.session?.id);
+  deleteSessionTokenCookie();
 
   return redirect("/");
 };
