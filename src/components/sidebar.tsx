@@ -30,7 +30,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Command, ChevronRight, ChevronsUpDown, LogOut } from "lucide-react";
+import { ChevronRight, ChevronsUpDown, LogOut, Tent } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -45,7 +45,7 @@ export default function TheSidebar() {
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Command className="size-4" />
+                  <Tent className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Acme Inc</span>
