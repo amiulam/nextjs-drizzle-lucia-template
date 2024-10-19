@@ -1,13 +1,5 @@
-"use client";
-
-import Link from "next/link";
+import H1 from "@/components/h1";
 
 export default function Framer() {
-  return (
-    <div>
-      <Link href="/" className="text-lg font-medium">
-        Home
-      </Link>
-    </div>
-  );
+  return <H1>Framer Title</H1>;
 }

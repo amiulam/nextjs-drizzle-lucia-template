@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Breadcrumb,
@@ -10,7 +9,9 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { SidebarTrigger } from "./ui/sidebar";
+import { Separator } from "./ui/separator";
+import { formatBreadcrumbText } from "@/lib/utils";
 
 export default function Header() {
   const pathname = usePathname();
@@ -18,27 +19,24 @@ export default function Header() {
   breadcrumbData.shift();
 
   return (
-    <header className="flex items-center justify-center border-b border-zinc-200 bg-white">
-      <Breadcrumb>
-        <BreadcrumbList>
-          {breadcrumbData.map((data, i) => (
-            <BreadcrumbItem key={data}>
-              {breadcrumbData.length - 1 === i ? (
-                <BreadcrumbPage>{capitalizeFirstLetter(data)}</BreadcrumbPage>
-              ) : (
-                <>
-                  <BreadcrumbItem key={data}>
-                    <BreadcrumbLink asChild>
-                      <Link href={`/${data}`}>{data}</Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                </>
-              )}
+    <header className="flex h-16 shrink-0 items-center gap-2">
+      <div className="flex items-center gap-2 px-6">
+        <SidebarTrigger />
+        <Separator orientation="vertical" className="mx-2 h-4" />
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem className="hidden md:block">
+              <BreadcrumbLink href="#">App</BreadcrumbLink>
             </BreadcrumbItem>
-          ))}
-        </BreadcrumbList>
-      </Breadcrumb>
+            <BreadcrumbSeparator className="hidden md:block" />
+            {breadcrumbData.map((item) => (
+              <BreadcrumbItem key={item}>
+                <BreadcrumbPage>{formatBreadcrumbText(item)}</BreadcrumbPage>
+              </BreadcrumbItem>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
     </header>
   );
 }

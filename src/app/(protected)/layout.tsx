@@ -1,8 +1,9 @@
-import Header from "@/components/header";
-import Sidebar from "@/components/sidebar";
-import { getCurrentSession } from "@/lib/auth/session";
 import type { Metadata } from "next";
+import { getCurrentSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import TheSidebar from "@/components/sidebar";
+import Header from "@/components/header";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -17,14 +18,14 @@ export default async function ProtectedLayout({
   if (!user) redirect("/");
 
   return (
-    <div className="grid grid-cols-[4rem_1fr]">
-      <Sidebar />
-      <div className="grid grid-rows-[3.5rem_1fr]">
-        <Header />
-        <main className="min-h-[calc(100vh-3.5rem)] overflow-x-auto bg-[#F6F8FA] p-4">
-          {children}
-        </main>
-      </div>
-    </div>
+    <>
+      <SidebarProvider>
+        <TheSidebar />
+        <SidebarInset>
+          <Header />
+          <div className="flex flex-1 flex-col gap-4 p-6 pt-0">{children}</div>
+        </SidebarInset>
+      </SidebarProvider>
+    </>
   );
 }

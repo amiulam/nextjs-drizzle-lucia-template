@@ -11,3 +11,11 @@ export const sleep = (delay: number) =>
 export const capitalizeFirstLetter = (word: string) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
+
+export const formatBreadcrumbText = (word: string): string => {
+  const formattedText = word
+    .split("-")
+    .map((w) => capitalizeFirstLetter(w))
+    .join(" ");
+  return formattedText;
+};
