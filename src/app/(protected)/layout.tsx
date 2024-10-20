@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import TheSidebar from "@/components/sidebar";
 import Header from "@/components/header";
+import { SessionContextProvider } from "@/context/session-context-provider";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -14,11 +15,11 @@ export default async function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { user } = await getCurrentSession();
-  if (!user) redirect("/");
+  const sessionData = await getCurrentSession();
+  if (!sessionData) redirect("/");
 
   return (
-    <>
+    <SessionContextProvider value={sessionData}>
       <SidebarProvider>
         <TheSidebar />
         <SidebarInset>
@@ -26,6 +27,6 @@ export default async function ProtectedLayout({
           <div className="flex flex-1 flex-col gap-4 p-6 pt-0">{children}</div>
         </SidebarInset>
       </SidebarProvider>
-    </>
+    </SessionContextProvider>
   );
 }

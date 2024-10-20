@@ -30,12 +30,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronRight, ChevronsUpDown, LogOut, Tent } from "lucide-react";
+import {
+  ChevronRight,
+  ChevronsUpDown,
+  LogOut,
+  Tent,
+  UserPen,
+} from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/actions/auth";
+import { useSession } from "@/context/session-context-provider";
 
 export default function TheSidebar() {
+  const { user } = useSession();
   const pathname = usePathname();
 
   return (
@@ -45,7 +53,7 @@ export default function TheSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Tent className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -133,11 +141,15 @@ export default function TheSidebar() {
           <SidebarMenu>
             {data.administrator.map((item) => (
               <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
-                    <item.icon />
+                <SidebarMenuButton asChild isActive={item.url === pathname}>
+                  <Link href={item.url}>
+                    <item.icon
+                      className={cn({
+                        "text-sky-600": item.url === pathname,
+                      })}
+                    />
                     <span>{item.name}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
@@ -158,10 +170,8 @@ export default function TheSidebar() {
                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {data.user.name}
-                    </span>
-                    <span className="truncate text-xs">{data.user.email}</span>
+                    <span className="truncate font-semibold">{user?.name}</span>
+                    <span className="truncate text-xs">{user?.email}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -184,15 +194,17 @@ export default function TheSidebar() {
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {data.user.name}
+                        {user?.name}
                       </span>
-                      <span className="truncate text-xs">
-                        {data.user.email}
-                      </span>
+                      <span className="truncate text-xs">{user?.email}</span>
                     </div>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <UserPen />
+                  Profile
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={async () => {
                     await signOut();
