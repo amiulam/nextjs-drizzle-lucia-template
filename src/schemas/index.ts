@@ -66,3 +66,11 @@ export const UpdateUserSchema = UpdateUser.refine(
     path: ["confirmPassword"],
   },
 );
+
+export const SettingSchema = z.object({
+  theme: z.enum(["light", "dark"], {
+    required_error: "Please select a theme.",
+  }),
+});
+
+export type SettingInput = z.infer<typeof SettingSchema>;

@@ -31,8 +31,7 @@ export default async function Home() {
     },
     {
       name: "Self Made Auth Flow",
-      description:
-        "Credential authentication with email and password",
+      description: "Credential authentication with email and password",
       logo: IconLock,
     },
     {
@@ -51,10 +50,10 @@ export default async function Home() {
       logo: ShadcnUi,
     },
   ];
-  
+
   return (
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 sm:p-20">
-      <div>Next.js 15 Template</div>
+      <div>Next.js 14 Template</div>
       <main className="relative row-start-2 flex flex-col items-center gap-8 sm:items-start">
         <div className="container mx-auto lg:max-w-screen-lg">
           <h1 className="mb-7 text-center text-3xl font-bold md:text-xl lg:text-3xl">

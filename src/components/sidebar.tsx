@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { data } from "@/lib/constant";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import {
@@ -45,6 +45,7 @@ import { useSession } from "@/context/session-context-provider";
 export default function TheSidebar() {
   const { user } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <Sidebar variant="inset">
@@ -201,7 +202,11 @@ export default function TheSidebar() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push("/app/profile");
+                  }}
+                >
                   <UserPen />
                   Profile
                 </DropdownMenuItem>

@@ -1,4 +1,10 @@
-import { LayoutDashboard, Settings, Sheet, SquareTerminal, Users } from "lucide-react";
+import {
+  LayoutDashboard,
+  Settings,
+  Sheet,
+  SquareTerminal,
+  Users,
+} from "lucide-react";
 
 export const ITEMS_PER_PAGE = 7;
 
@@ -44,7 +50,7 @@ export const data = {
     },
     {
       name: "App Settings",
-      url: "#",
+      url: "/app/settings",
       icon: Settings,
     },
   ],

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThemeProvider } from "@/context/theme-context-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,9 +20,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <Toaster />
-      <body className={`${geistSans.className} bg-[#fafafa]`}>{children}</body>
+      <body className={`${geistSans.className} bg-[#fafafa]`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

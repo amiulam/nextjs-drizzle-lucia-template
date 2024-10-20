@@ -1,7 +1,15 @@
-import { pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 // Enums
 export const roleEnum = pgEnum("role", ["USER", "ADMIN"]);
+export const themeEnum = pgEnum("theme", ["light", "dark"]);
 
 // Tables define
 export const userTable = pgTable("user", {
@@ -26,6 +34,14 @@ export const sessionTable = pgTable("session", {
   createdAt: timestamp("createdAt").defaultNow(),
 });
 
+export const settingsTable = pgTable("settings", {
+  id: serial("id").primaryKey(),
+  theme: themeEnum("theme").notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow(),
+});
+
 // Types
 export type User = typeof userTable.$inferSelect;
 export type Session = typeof sessionTable.$inferSelect;
+export type Settings = typeof settingsTable.$inferSelect;
