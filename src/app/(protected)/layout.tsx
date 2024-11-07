@@ -16,7 +16,7 @@ export default async function ProtectedLayout({
   children: React.ReactNode;
 }>) {
   const sessionData = await getCurrentSession();
-  if (!sessionData) redirect("/");
+  if (!sessionData?.session) redirect("/signin");
 
   return (
     <SessionContextProvider value={sessionData}>
