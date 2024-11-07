@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { data } from "@/lib/constant";
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   Sidebar,
   SidebarContent,

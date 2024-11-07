@@ -42,6 +42,7 @@ export const settingsTable = pgTable("settings", {
 });
 
 // Types
+type SelectSession = typeof sessionTable.$inferSelect;
+export type Session = Omit<SelectSession, "createdAt">;
 export type User = typeof userTable.$inferSelect;
-export type Session = typeof sessionTable.$inferSelect;
 export type Settings = typeof settingsTable.$inferSelect;
